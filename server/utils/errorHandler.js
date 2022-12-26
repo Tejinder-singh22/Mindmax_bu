@@ -7,4 +7,4 @@ class ErrorHandler extends Error{  //basically we can use this class to pass our
     }
 }
 
-module.exports = ErrorHandler
+export default ErrorHandler;

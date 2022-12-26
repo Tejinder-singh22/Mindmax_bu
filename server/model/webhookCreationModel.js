@@ -1,5 +1,4 @@
 
- 
 import mongoose  from "mongoose";
 const webhookCreationSchema = new mongoose.Schema({
   topic: {
@@ -16,6 +15,10 @@ const webhookCreationSchema = new mongoose.Schema({
   },
   shop_id: {
    type: String,
+   require: true,
+  },
+  response:{
+    type: Array,
   },
   created_at: {
     type: Date

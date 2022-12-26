@@ -4,7 +4,7 @@ import { Double } from "mongodb";
 import mongoose  from "mongoose";
 const orderCheckoutSchema = new mongoose.Schema({
   checkout_id: {
-    type: Double,
+    type: Number,
     required: true,
   },
  checkout_token: {

@@ -12,9 +12,6 @@ const studentSchema = new mongoose.Schema({
   formData: {
     type: Array,
   },
-  shop_id: {
-    type: String,  
-  },
   serverRequestData: {
     type: String,
   },

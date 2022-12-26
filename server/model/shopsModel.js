@@ -19,7 +19,8 @@ const shopSchema = new mongoose.Schema({
     type: String
   },
   shop_id: {
-    type: String
+    type: String,
+    required: true,
   },
   shop_state: {
     type: String

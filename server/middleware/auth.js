@@ -1,7 +1,11 @@
 import { Shopify } from "@shopify/shopify-api";
-
+import insertData from "../Dao/insert.js";
+import insertSyncedOrders from "../Dao/insertSyncedOrders.js";
+import getOrders from "../helpers/getOrders.js";
+import webhookCreation from "../Dao/insertWebhookCreation.js";
 import topLevelAuthRedirect from "../helpers/top-level-auth-redirect.js";
-
+import createWebhook from "../webhooks/createWebhook.js";
+import ErrorHander from "../utils/errorHandler.js";
 export default function applyAuthMiddleware(app) {
   app.get("/auth", async (req, res) => {
     if (!req.signedCookies[app.get("top-level-oauth-cookie")]) {
@@ -40,7 +44,7 @@ export default function applyAuthMiddleware(app) {
     );
   });
 
-  app.get("/auth/callback", async (req, res) => {
+  app.get("/auth/callback", async (req, res,next) => {
     try {
       const session = await Shopify.Auth.validateAuthCallback(
         req,
@@ -73,23 +77,91 @@ export default function applyAuthMiddleware(app) {
    // STEP-1 inserting shops info on app installation
   //  const host = req.query.host;
    process.env.TEMP_STORE = session.shop;
-   console.log(session.shop +' in auth 85');
+   console.log(session.shop +' in auth 76');
    console.log(session.accessToken + 'our access token');
-   try {
-     insertData(session, host, process.env.SHOPIFY_API_KEY);
+    
+     insertData(session, host, process.env.SHOPIFY_API_KEY,next);
      // Sync orders on installation and insert
+     try{
      const orderData = await getOrders(session);
+    //  console.log(orderData+'orderData');
      const obj = JSON.parse(orderData);
    
      obj.orders.forEach((element) => {
        console.log(element + 'we got in auth 87!!!');
-       insertSyncedOrders(element, session.shop);
+       insertSyncedOrders(element, session.shop,next);
      });
-   } catch (error) {
-     console.log(error);
-   }
+    } catch(e)
+    {
+      throw new Error(e);
+    }
 
 
+     //STEP-2
+      //@param
+      // @session, @checkoutTopic, @checkoutUrl
+      createWebhook(session, "orders/fulfilled", "ordersWebhook")
+        .then((data) => {
+          var response;
+          data = JSON.parse(data);
+          if(data.webhook){
+            response = JSON.stringify(data.webhook);
+            console.log("webhook for ORDER FULLFILMENT created " + data);
+            webhookCreation(session, 'orders/fulfilled', true, response);
+          }
+          if(data.errors)
+          {
+            response = JSON.stringify(data.errors);
+            if(data.errors.address[0] != "for this topic has already been taken"){
+              webhookCreation(session, 'orders/fulfilled', false, response);
+            }else console.log('already created orders/fulfilled'); 
+          }         
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
+
+      createWebhook(session, "checkouts/create", "checkoutWebhook")
+        .then((data) => {
+          var response;
+          data = JSON.parse(data);
+          if(data.webhook){
+            response = JSON.stringify(data.webhook);
+            console.log("webhook for CHECKOUT CREATE created " + data);
+            webhookCreation(session, 'checkouts/create', true, response);
+          }
+          if(data.errors)
+          {
+            response = JSON.stringify(data.errors);
+            if(data.errors.address[0] != "for this topic has already been taken"){
+              webhookCreation(session, 'checkouts/create', false, response);
+            }else  console.log('already created checkouts/create'); 
+          } 
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
+
+      createWebhook(session, "app/uninstalled", "appUninstalledWebhook")
+        .then((data) => {
+          var response;
+          data = JSON.parse(data);
+          if(data.webhook){
+            response = JSON.stringify(data.webhook);
+            console.log("webhook for APP UININSTALL created " + data);
+            webhookCreation(session, 'app/uninstalled', true, response);
+          }
+          if(data.errors)
+          {
+            response = JSON.stringify(data.webhook);
+            if(data.errors.address[0] != "for this topic has already been taken"){
+              webhookCreation(session, 'app/uninstalled', false, response);
+            }else  console.log('already created app/uninstalled'); 
+          } 
+        })
+        .catch((e) => {
+          console.log(e.message);
+        });
 
 
 
