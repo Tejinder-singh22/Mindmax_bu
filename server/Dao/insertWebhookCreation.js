@@ -11,8 +11,8 @@ export default async function insertWebhookCreation(session, topic, status, resp
   
   let webhookData = new webhookLog({
     topic: topic,
+    shop_id: session.shop_id,
     status: status,
-    shop_id: session.id,
     shop_name : session.shop,
     response : response,
     created_at: new Date(),

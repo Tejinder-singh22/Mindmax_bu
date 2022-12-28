@@ -6,7 +6,7 @@ import orderWebhook from "../webhooks/orderWebhook.js";
  * @param  [type] $req         [object]
  * @return [type]              [void]
  */
-export default async function orderWebhookController(order, req) {
+export default async function orderWebhookController(order, req, shopId) {
   var currentShop = req.query.shop;
   var source = req.body.source_name;
   console.log(source + " source name");
@@ -17,7 +17,8 @@ export default async function orderWebhookController(order, req) {
        */
       // orderReccuring(order, currentShop);
     } else {
-      orderWebhook(order, currentShop);
+      console.log(shopId+ 'Order-2');
+      orderWebhook(order, currentShop, shopId);
     }
   }
 }

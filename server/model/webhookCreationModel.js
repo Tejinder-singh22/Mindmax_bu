@@ -5,6 +5,10 @@ const webhookCreationSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  shop_id: {
+    type: mongoose.Schema.ObjectId,
+    ref: "shopSchema" 
+  },
   status: {
     type: Boolean,
     required: true,
@@ -12,10 +16,6 @@ const webhookCreationSchema = new mongoose.Schema({
   shop_name: {
     type: String,
     required: true,
-  },
-  shop_id: {
-   type: String,
-   require: true,
   },
   response:{
     type: Array,

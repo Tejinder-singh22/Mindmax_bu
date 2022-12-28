@@ -5,6 +5,10 @@ const storeLogSchema = new mongoose.Schema({
  log_type: {
     type: String
   },
+  shop_id: {
+    type: mongoose.Schema.ObjectId,
+    required: [true, 'required shopid']
+  },
   log_error: {
     type: Array,
     required: true,
@@ -13,10 +17,6 @@ const storeLogSchema = new mongoose.Schema({
     type: String,
   },
   shop_name:{
-    type: String,
-    required: true,
-  },
-  shop_id:{
     type: String,
     required: true,
   },

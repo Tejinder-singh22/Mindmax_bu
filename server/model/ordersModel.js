@@ -5,6 +5,11 @@ const orderSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
+    shop_id: {
+      type: mongoose.Schema.ObjectId,
+      ref: "shopSchema", 
+      required: [true, 'required shopid']
+    },
     first_name: {
       type: String,
     },

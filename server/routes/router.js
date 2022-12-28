@@ -10,7 +10,10 @@ router.post("/ordersWebhook", async (req, res) => {
     console.log("🎉 We got an order!hjkkklkl");
     try {
       var order = req.body;
-      orderWebhookController(order, req);
+      console.log(order);
+      let shopId = req.query.current_shop_id;
+      console.log(shopId +' Order-1');
+      orderWebhookController(order, req, shopId);
       res.sendStatus(200);
     } catch (error) {
       res.status(500).send(error.message);
@@ -24,9 +27,11 @@ router.post("/checkoutWebhook", async (req, res) => {
     console.log("🎉 Checkout order Triggered");
     try {
       const currentShop = req.query.shop;
-      console.log(req.body);
+      // console.log(req.body);
       const order = req.body;
-      checkoutWebhookController(currentShop, order);
+      let shopId = req.query.current_shop_id;
+      console.log(shopId +' checkout-1');
+      checkoutWebhookController(currentShop, order, shopId);
       res.sendStatus(200);
     } catch (error) {
       res.status(500).send(error.message);

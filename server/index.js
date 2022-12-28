@@ -179,6 +179,7 @@ app.get("/form", (req, res) => {
       // Client-side routing will pick up on the correct route to render, so we always render the index here
       res
         .status(200)
+        .set("X-Shopify-Hmac-Sha256")
         .set("Content-Type", "text/html")
         .send(fs.readFileSync(`${process.cwd()}/dist/client/index.html`));
     });

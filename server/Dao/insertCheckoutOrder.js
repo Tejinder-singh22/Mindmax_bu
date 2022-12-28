@@ -5,9 +5,11 @@ import OrderCheckout from "../model/ordersCheckoutModel.js";
  * @param  [type] currentShop [description]
  * @return [type]             [void]
  */
-export default async function insertFulfilled(order, currentShop) {
+export default async function insertFulfilled(order, currentShop,current_shopId) {
+  console.log(typeof current_shopId+ 'checkout-3');
   let myorder = new OrderCheckout({
     checkout_id: order.id,
+    shop_id: current_shopId,
     checkout_token: order.token,
     shop_name: currentShop,
     cart_token: order.cart_token,

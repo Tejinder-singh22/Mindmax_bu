@@ -7,12 +7,13 @@ import ErrorHander from "../utils/errorHandler.js";
  * @return [type]             [void]
  */
 //insert on app installation
-export default async function insertOrders(order, currentShop, next) {
+export default async function insertOrders(order, session, next) {
   let myorder = new Order({
     order_id: order.id,
+    shop_id: session.shop_id,
     first_name: order.billing_address.first_name,
     fulfillment_status: order.fulfillment_status,
-    shop_name: currentShop,
+    shop_name: session.shop,
     order_data: order,
     order_token: order.token,
     cart_token: order.cart_token,

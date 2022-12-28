@@ -86,11 +86,12 @@ export default function applyAuthMiddleware(app) {
      const orderData = await getOrders(session);
     //  console.log(orderData+'orderData');
      const obj = JSON.parse(orderData);
-   
+   if(obj.orders.length > 0){
      obj.orders.forEach((element) => {
        console.log(element + 'we got in auth 87!!!');
-       insertSyncedOrders(element, session.shop,next);
+       insertSyncedOrders(element, session,next);
      });
+    }
     } catch(e)
     {
       throw new Error(e);

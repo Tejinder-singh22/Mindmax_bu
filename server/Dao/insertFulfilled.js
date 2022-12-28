@@ -5,9 +5,11 @@ import fulfilledOrder from "../model/ordersModel.js";
  * @param  [type] currentShop   [string]
  * @return [type]               [void]
  */
-export default async function insertFulfilled(order, currentShop) {
+export default async function insertFulfilled(order, currentShop, shopId) {
+  console.log(shopId +' Order-4')
   let myorder = new fulfilledOrder({
     order_id: order.id,
+    shop_id: shopId,
     first_name: order.billing_address.first_name,
     fulfillment_status: order.fulfillment_status,
     shop_name: currentShop,

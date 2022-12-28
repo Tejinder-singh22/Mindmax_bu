@@ -6,6 +6,11 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  shop_id: {
+    type: mongoose.Schema.ObjectId,
+    ref: "shopSchema", 
+    required: [true, 'required shopid']
+  },
   student_token: {
     type: String,  
   },

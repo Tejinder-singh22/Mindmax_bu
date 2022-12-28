@@ -18,7 +18,7 @@ export default function createWebhook(session, topic, url) {
     body: JSON.stringify({
       webhook: {
         topic: topic,
-        address: `${process.env.HOST}/${url}?shop=${session.shop}`,
+        address: `${process.env.HOST}/${url}?shop=${session.shop}&current_shop_id=${session.shop_id}`,
         format: "json",
       },
     }),

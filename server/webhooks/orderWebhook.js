@@ -9,7 +9,7 @@ import insertFulfilled from "../Dao/insertFulfilled.js";
  * @param  [type] currentShop  [description]
  * @return [type]              [void]
  */
-export default async function orderWebhook(order, currentShop) {
+export default async function orderWebhook(order, currentShop, shopId) {
   var studentData;
   if (order.cart_token != null && currentShop != null) {
     /* compare studentData via webhook cartToken */
@@ -55,7 +55,8 @@ export default async function orderWebhook(order, currentShop) {
   /**
    * inserting fullfilled order in Db;
    */
-  insertFulfilled(order, currentShop);
+  console.log(shopId+' Order-3');
+  insertFulfilled(order, currentShop, shopId);
 
   /*Embed DOB and Gender Fields in Order data'*/
   if (studentData != null || studentData != undefined) {

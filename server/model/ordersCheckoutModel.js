@@ -1,11 +1,16 @@
 
  
-import { Double } from "mongodb";
+
 import mongoose  from "mongoose";
 const orderCheckoutSchema = new mongoose.Schema({
   checkout_id: {
     type: Number,
     required: true,
+  },
+  shop_id: {
+    type: mongoose.Schema.ObjectId,
+    ref: "shopSchema", 
+    required: [true, 'required shopid']
   },
  checkout_token: {
     type: String

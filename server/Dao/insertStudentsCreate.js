@@ -8,6 +8,7 @@ import Student from "../model/studentsModel.js";
 export default async function insertStudentsCreate(student, currentShop) {
   let mycustomer = new Student({
     shop_name: currentShop,
+    shop_id: "63a42a80c5fa3ea5a3125cff",
     student_token: student.token,
     formData: student,
     serverRequestData: "server info",
@@ -16,7 +17,7 @@ export default async function insertStudentsCreate(student, currentShop) {
   });
 
   //validation
-  const user = await Student.findOne({ uniqueSessionId: student.token });
+  const user = await Student.findOne({ student_token: student.token });
   if (user) {
     Student.findOneAndUpdate(
       { student_token: student.token },

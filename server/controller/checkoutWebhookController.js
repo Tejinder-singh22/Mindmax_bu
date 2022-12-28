@@ -7,8 +7,9 @@ import insertCheckoutOrder from "../Dao/insertCheckoutOrder.js";
  * @return [type]                    [void]
  */
 //STEP-4
-export default function orderWebhookController(currentShop, order) {
+export default function orderWebhookController(currentShop, order, shopId) {
   if (currentShop != null && order != null) {
-    insertCheckoutOrder(order, currentShop);
+    console.log(shopId +' checkout-2');
+    insertCheckoutOrder(order, currentShop, shopId);
   }
 }

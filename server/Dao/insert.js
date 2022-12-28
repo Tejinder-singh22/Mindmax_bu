@@ -35,6 +35,7 @@ export default async function insertData(session, host, apiKey, next) {
   //validation
   try {
     var user = await Shop.findOne({ shop_name: session.shop });
+    session['shop_id'] = user._id;
     console.log('finding')
   } catch (error) {
     return next(new ErrorHander(error));
@@ -77,6 +78,7 @@ export default async function insertData(session, host, apiKey, next) {
   } else {
     try {
       console.log("data inserted succesfully");
+      session['shop_id'] = myshop._id;
       myshop.save();
     } catch (error) {
       return next(new ErrorHander(error));
