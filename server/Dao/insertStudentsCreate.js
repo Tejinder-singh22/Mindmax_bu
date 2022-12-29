@@ -5,10 +5,10 @@ import Student from "../model/studentsModel.js";
  * @param  [type] currentShop [description]
  * @return [type]             [void]
  */
-export default async function insertStudentsCreate(student, currentShop) {
+export default async function insertStudentsCreate(student, currentShop, shopId) {
   let mycustomer = new Student({
     shop_name: currentShop,
-    shop_id: "63a42a80c5fa3ea5a3125cff",
+    shop_id: shopId,
     student_token: student.token,
     formData: student,
     serverRequestData: "server info",

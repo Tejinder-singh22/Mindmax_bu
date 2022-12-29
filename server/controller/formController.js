@@ -6,13 +6,13 @@ import insertStudentsCreate from "../Dao/insertStudentsCreate.js";
  * @param  [type] $res               [obj]
  * @return [type]                    [object]
  */
-export default function formController(Student, currentShop) {
+export default function formController(Student, currentShop, shopId) {
   if (
     (Student != null && Student.token != null && currentShop != null) ||
     currentShop != undefined
   ) {
     console.log('in formControll');
-    insertStudentsCreate(Student, currentShop);
+    insertStudentsCreate(Student, currentShop,shopId);
 
     let obj = {
       checkout: {

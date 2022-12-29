@@ -7,6 +7,7 @@ const storeLogSchema = new mongoose.Schema({
   },
   shop_id: {
     type: mongoose.Schema.ObjectId,
+    ref: "shopSchema", 
     required: [true, 'required shopid']
   },
   log_error: {

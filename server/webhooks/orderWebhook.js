@@ -2,6 +2,7 @@ import getStudentData from "../Dao/getStudentData.js";
 import addMetaFields from "../metafields/addMetaFields.js";
 import getStudentDataByEmail from "../Dao/getStudentDataByEmail.js";
 import insertFulfilled from "../Dao/insertFulfilled.js";
+import SalesForce from "../Salesforce/salesforce.js";
 // import SalesForce from "../Salesforce/salesforce.js";
 /**
  * When Order Webhook Hitt then [insert order and create opportunities on the bases of subscription plan (source_name)]
@@ -68,23 +69,23 @@ export default async function orderWebhook(order, currentShop, shopId) {
 
   // STEP 10;
   /* Sale record class;*/
-  // const salesforce = new SalesForce();
-  // salesforce
-  //   .generateToken(currentShop)
-  //   .then((data) => {
-  //     console.log(data);
-  //     console.log(salesforce.accessToken + "line ...50");
-  //     /**
-  //      * creating sales record in salesforce;
-  //      */
-  //     salesforce.createSaleRecord(order).then((data) => {
-  //       if (data != null) {
-  //         console.log(JSON.stringify(data) + "hhhhhhhh");
-  //         //    console.log(data.contactId);
-  //       }
-  //     });
-  //   })
-  //   .catch((error) => {
-  //     console.log(error);
-  //   });
+  const salesforce = new SalesForce();
+  salesforce
+    .generateToken(currentShop)
+    .then((data) => {
+      console.log(data);
+      console.log(salesforce.accessToken + "line ...50");
+      /**
+       * creating sales record in salesforce;
+       */
+      salesforce.createSaleRecord(order).then((data) => {
+        if (data != null) {
+          console.log(JSON.stringify(data) + "hhhhhhhh");
+          //    console.log(data.contactId);
+        }
+      });
+    })
+    .catch((error) => {
+      console.log(error);
+    });
 }
