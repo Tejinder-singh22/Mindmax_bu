@@ -71,7 +71,7 @@ export default async function orderWebhook(order, currentShop, shopId) {
   /* Sale record class;*/
   const salesforce = new SalesForce();
   salesforce
-    .generateToken(currentShop)
+    .generateToken(currentShop,shopId)
     .then((data) => {
       console.log(data);
       console.log(salesforce.accessToken + "line ...50");

@@ -7,7 +7,7 @@ import SalesForce from "../Salesforce/salesforce.js";
  * @param  [type] currentShop  [description]
  * @return [type]              [void]
  */
-export default async function orderReccuring(order, currentShop) {
+export default async function orderReccuring(order, currentShop, shopId) {
   /* compare studentData via webhook cartToken */
   if (order.customer != null && order.customer["id"]) {
     var orderCustomerId = order.customer["id"];
@@ -35,7 +35,7 @@ export default async function orderReccuring(order, currentShop) {
   }
   const salesforce = new SalesForce();
   salesforce
-    .generateToken(currentShop)
+    .generateToken(currentShop,shopId)
     .then((data) => {
       console.log(data);
       console.log(salesforce.accessToken + "line ...50");

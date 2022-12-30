@@ -7,13 +7,15 @@ import storeLog from "../model/storeLogModel.js";
  */
 export default async function insertStoreLog(
   logType,
+  shop_id,
   logError,
   name,
   orderJson,
-  currentShop
+  currentShop,
 ) {
   let log = new storeLog({
     log_type: logType,
+    shop_id, shop_id,
     log_error: logError,
     order_id: name,
     order_json: orderJson,

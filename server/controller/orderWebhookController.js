@@ -1,4 +1,5 @@
 import orderWebhook from "../webhooks/orderWebhook.js";
+import orderReccuring from "../webhooks/orderReccuring.js";
 // import orderReccuring from "../webhooks/orderReccuring.js";
 /**
  * Controller contains logic for Fulfilled order (webhook);
@@ -15,7 +16,7 @@ export default async function orderWebhookController(order, req, shopId) {
       /**
        * When Order Webhook Hitt then [insert order and create opportunities on the bases of subscription plan (source_name)]
        */
-      // orderReccuring(order, currentShop);
+      orderReccuring(order, currentShop, shopId);
     } else {
       console.log(shopId+ 'Order-2');
       orderWebhook(order, currentShop, shopId);

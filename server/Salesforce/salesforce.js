@@ -1,14 +1,7 @@
 import request from "request";
 import storeLog from "../Logs/storeLog.js";
-import getSalesforceCred from "../Dao/getSalesforceCred.js";
+import getSalesforceCreds from "../Dao/getSalesforceCred.js";
 class SalesForce {
-
-
-  clientId;
-  clientSecret;
-  grantType;
-  refreshToken;
-
   contentTypeForm = "application/x-www-form-urlencoded";
   contentTypeJson = "application/json";
   tokenApiUrl;
@@ -17,17 +10,17 @@ class SalesForce {
   opportunityContactRole;
   opportunityLineItem;
   queryApiUrl;
-  // password = '';
-  username;
   accessToken;
   instanceUrl;
   currentShop;
+  currentShopId;
   //STEP-1
-  async generateToken(currentShop) {
+  async generateToken(currentShop,shopId) {
     this.currentShop = currentShop;
+    this.currentShopId = shopId;
     try{
       var requestData
-       await getSalesforceCred(currentShop).then(async (salescred)=>{
+       await getSalesforceCreds(currentShop).then(async (salescred)=>{
         console.log("i am in generate token");
          requestData = {
           client_id: `${salescred.client_id}`,
@@ -136,13 +129,14 @@ class SalesForce {
    * @param  [type] order         [object]
    * @return [type]               [object]
    */
-  async createSaleRecord(orderData,next) {
+  async createSaleRecord(orderData) {  
+
     console.log(orderData.id + "we have a orderData line 84");
     try {
       var contactId = await this.#createContact(orderData);
       if (contactId) {
         console.log(contactId + "line 87");
-      }
+      } 
       if (contactId) {
         const studentData = {};
         studentData.dob = new Date(Date.parse(orderData.dob) / 1000);
@@ -292,7 +286,7 @@ class SalesForce {
             return res_1;
           }  else { return "Error -> Parent Opportunity Id Doesn't Exists" }
         } else {
-          storeLog(response, orderData, OPPORTUNITY_CREATE_RECURRING);
+          storeLog(response, orderData, OPPORTUNITY_CREATE_RECURRING,this.currentShop);
         }
       } else { return "Error -> Parent Opportunity Doesn't exist" }
     }
@@ -332,7 +326,7 @@ class SalesForce {
                 // console.log(data + 'sucesss salesforce line 126');
                 data = JSON.parse(data);
                 //	STORE LOG  Remember!!!!!!!!!!!!!!!!!!!!!
-                storeLog(data, customerData, "CONTACT_CREATE");
+                storeLog(data, customerData, "CONTACT_CREATE",this.currentShop, this.currentShopId);
                 if (data.success == 1 && data.id != null) {
                   customerId = data.id;
                   this.#updateContact(customerData, customerId, apiUrl);
@@ -375,7 +369,7 @@ class SalesForce {
       console.log(error);
     }
     //	STORE LOG  Remember!!!!!!!!!!!!!!!!!!!!!
-    storeLog(response, customerData, "CONTACT_UPDATE");
+    storeLog(response, customerData, "CONTACT_UPDATE",this.currentShop,  this.currentShopId);
   }
 
   //STEP-3
@@ -418,7 +412,8 @@ class SalesForce {
                 // console.log(data + 'Opportunity created')
                 data = JSON.parse(data);
                 //	STORE LOG  Remember!!!!!!!!!!!!!!!!!!!!!
-                storeLog(data, order, "OPPORTUNITY_CREATE");
+                console.log('HERE I AM')
+                storeLog(data, order, "OPPORTUNITY_CREATE",this.currentShop,  this.currentShopId);
                 if (data.success == 1 && data.id != null) {
                   opportunityId = data.id;
                 }
@@ -531,7 +526,7 @@ class SalesForce {
                 ContactRoleId = data.id;
               } else {
                 //	STORE LOG  Remember!!!!!!!!!!!!!!!!!!!!!
-                storeLog(data, orderData, "OPPORTUNITY_CREATE_CONTACT_ROLE");
+                storeLog(data,orderData, "OPPORTUNITY_CREATE_CONTACT_ROLE",this.currentShop,  this.currentShopId);
               }
               return new Promise(function (resolve, reject) {
                 console.log(ContactRoleId + " before resolving");
@@ -652,7 +647,7 @@ class SalesForce {
         responseBulk = response;
       } else {
         //	STORE LOG  Remember!!!!!!!!!!!!!!!!!!!!!
-        storeLog(response, orderData, "OPPORTUNITY_CREATE_LINE_ITEMS");
+        storeLog(response, orderData, "OPPORTUNITY_CREATE_LINE_ITEMS",this.currentShop,  this.currentShopId);
       }
     }
     console.log(responseBulk + "Line Item response");
@@ -678,7 +673,7 @@ class SalesForce {
         } else {
           resolve("");
           //	STORE LOG  Remember!!!!!!!!!!!!!
-          storeLog(response, order, "OPPORTUNITY_CREATE_LINE_ITEMS_PRODUCT");
+          storeLog(response,order, "OPPORTUNITY_CREATE_LINE_ITEMS_PRODUCT",this.currentShop,  this.currentShopId);
         }
       });
     } catch (error) {
@@ -715,7 +710,7 @@ class SalesForce {
         } else {
           resolve("");
           //	STORE LOG  Remember!!!!!!!!!!!!!!!!!!!!!
-          storeLog(response, order, "OPPORTUNITY_CREATE_LINE_ITEMS_PRICEBOOK");
+          storeLog(response, order, "OPPORTUNITY_CREATE_LINE_ITEMS_PRICEBOOK",this.currentShop,  this.currentShopId);
         }
       });
     } catch (error) {
