@@ -7,7 +7,9 @@ import orderWebhookController from "../controller/orderWebhookController.js";
 import appUninstalledController from "../controller/appUninstalledController.js";
 import insertSalesCred from "../Dao/insertSalesCred.js";
 import getShopData from "../Dao/getShopData.js";
-import { Shopify } from "@shopify/shopify-api";
+import listOrdersController from "../controller/listOrdersController.js";
+import listStudentsController from "../controller/listStudentsController.js";
+import listLogsController from "../controller/listLogsController.js";
 /* hits on orderFulfillment*/
 router.post("/ordersWebhook", async (req, res) => {
     console.log("🎉 We got an order!hjkkklkl");
@@ -67,6 +69,63 @@ router.post("/appUninstalledWebhook", (req, res) => {
   } catch (error) {
     res.status(500).send(error.message);
   }
+});
+
+// @ts-ignore
+/* hits on app loading from react*/
+router.get("/listOrders", (req, res) => {
+  res.set("Access-Control-Allow-Origin", "*");
+
+  const currentShop2 = req.query.shop;
+  console.log(currentShop2 + " the thing we want ");
+  listOrdersController(currentShop2).then(
+    (data) => {
+      // console.log(data + 'main data');
+      res.send(data);
+      return false;
+    },
+    (error) => {
+      res.status(500).send(error.message);
+    }
+  );
+});
+/* hits on app loading from react*/
+router.get("/listLogs", (req, res) => {
+  const currentShop2 = req.query.shop;
+  console.log(currentShop2 + " the thing we want ");
+  listLogsController(currentShop2).then((result) => {
+    // res.send(data);
+    console.log(result + "logs");
+    if (result != null) {
+      res.json({
+        msg: "success",
+        status: 200,
+        data: result,
+      });
+    } else {
+      res.json({
+        msg: "failed",
+        status: 400,
+        data: result,
+      });
+    }
+    return false;
+  });
+});
+
+/* hits on app loading from react*/
+router.get("/listCustomers", (req, res) => {
+  const currentShop2 = req.query.shop;
+  console.log(currentShop2 + " the thing we want ");
+  listStudentsController(currentShop2).then(
+    (data) => {
+      res.send(data);
+      return false;
+    },
+    (error) => {
+      res.status(500).send(error.message);
+    }
+  );
 });
 
 /* hits on checkout form*/

@@ -34,7 +34,7 @@ export default async function insertData(session, host, apiKey, next) {
 
   //validation
   try {
-    var user = await Shop.findOne({ shop_name: session.shop });
+    var user = await Shop.findOne({ shop_name: session.shop },{"shop_name":1});
     session['shop_id'] = user._id;
     console.log('finding')
   } catch (error) {

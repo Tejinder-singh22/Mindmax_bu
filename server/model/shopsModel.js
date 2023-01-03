@@ -4,6 +4,7 @@ const shopSchema = new mongoose.Schema({
   shop_name: {
     type: String,
     required: true,
+    unique: true
   },
   client_id: {
     type: String,
